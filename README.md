@@ -1,9 +1,15 @@
-# splitnot
+# splitnot-api
 Notifications pushed to you when a transaction is added to your bank account.
 
-Simple webapp that monitors your bank account transactions, and notifies you when a new transaction is posted to your account.
+This is a Java based REST API which exposes a few API endpoints to be consumed by the splitnot frontend app.
 
-It uses plaid(https://plaid.com/) to retrieve your bank account transactions.
+It uses plaid(https://plaid.com/) to interface with your bank account.
+
+
+
+
+
+The project is planned to be done in 3 phases,
 
 Phase 1 - Retrieve your account transactions and display them in the webapp.
 
