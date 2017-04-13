@@ -1,0 +1,6 @@
+plaid:
+  client:
+    clientId: 0121212 #temporarily using random value till encrypted
+    clientSecret: 23123213  #temporarily using random value till encrypted
+
+  plaidurl: https://sandbox.plaid.com
