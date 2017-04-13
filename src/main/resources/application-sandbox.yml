@@ -1,4 +1,6 @@
-clientId: 5511172f0effc0670b8c932e
-clientSecret: 0ed931236e23173357f617045262aa
+plaid:
+  client:
+    clientId: 0121212 #temporarily using random value till encrypted
+    clientSecret: 23123213  #temporarily using random value till encrypted
 
-plaidurl: https://sandbox.plaid.com
+  plaidurl: https://sandbox.plaid.com
