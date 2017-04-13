@@ -1,6 +1,7 @@
 package com.megshan.splitnot.config;
 
 import com.plaid.client.DefaultPlaidPublicClient;
+import com.plaid.client.PlaidClients;
 import com.plaid.client.PlaidPublicClient;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,11 +23,7 @@ public class PlaidClientConfig {
     private String clientSecret;
 
     @Bean
-    public PlaidPublicClient plaidPublicClient() {
-
-        return new DefaultPlaidPublicClient.Builder()
-                .withClientId(clientId)
-                .withSecret(clientSecret)
-                .build();
+    public PlaidPublicClient getPlaidPublicClient() {
+        return PlaidClients.testPublicClient(clientId, clientSecret, null);
     }
 }
