@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.io.IOException;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;
@@ -24,17 +25,16 @@ import static org.springframework.http.HttpStatus.OK;
  * Created by shantanu on 4/13/17.
  */
 @RestController
-@Setter
 @Slf4j
 public class TokenController {
 
     @Autowired
     private TokenService tokenService;
 
-    @RequestMapping(value = "/users/{userKey}/accesstokens?", method = RequestMethod.POST)
+    @RequestMapping(value = "/users/{userKey}/accesstokens", params = {"publictoken"}, method = RequestMethod.POST)
     @ResponseStatus(OK)
     public void createAccessToken(@PathVariable("userKey") String userKey,
-                                           @RequestParam String publicToken) {
+                                  @RequestParam(value = "publictoken", required = true) String publicToken) throws IOException{
         log.info("addAccessTokenForPublicKey request received");
         tokenService.createAccessToken(userKey, publicToken);
     }

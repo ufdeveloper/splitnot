@@ -29,9 +29,9 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    @RequestMapping(value = "/accounts", params = {"accountId"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/accounts", params = {"accountid"}, method = RequestMethod.GET)
     @ResponseStatus(OK)
-    public Account getAccountByAccountId(@RequestParam(value = "accountId", required = true) String accountId) {
+    public Account getAccountByAccountId(@RequestParam(value = "accountid", required = true) String accountId) {
         log.info("getAccountByAccountId request received with id=" + accountId);
         return accountService.getAccountForAccountId(accountId);
     }
