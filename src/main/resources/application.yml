@@ -1,6 +1,7 @@
 plaid:
   client:
-    clientId: 0121212 #temporarily using random value till encrypted
-    clientSecret: 23123213  #temporarily using random value till encrypted
+    clientId: 5511172f0effc0670b8c932e
+    clientSecret: 0ed931236e23173357f617045262aa
+    publicKey: ed677c5c8e05864264b34296265933
 
   plaidurl: https://sandbox.plaid.com

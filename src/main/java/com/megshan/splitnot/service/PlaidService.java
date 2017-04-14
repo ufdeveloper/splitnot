@@ -13,5 +13,7 @@ import java.util.List;
 public interface PlaidService {
 
 
-    List<Institution> getAllInstitutions();
+    List<String> getAllInstitutions();
+
+    String getAccessToken();
 }

@@ -1,8 +1,6 @@
 package com.megshan.splitnot.config;
 
-import com.plaid.client.DefaultPlaidPublicClient;
-import com.plaid.client.PlaidClients;
-import com.plaid.client.PlaidPublicClient;
+import com.plaid.client.PlaidClient;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -21,9 +19,14 @@ public class PlaidClientConfig {
 
     private String clientId;
     private String clientSecret;
+    private String publicKey;
 
     @Bean
-    public PlaidPublicClient getPlaidPublicClient() {
-        return PlaidClients.testPublicClient(clientId, clientSecret, null);
+    public PlaidClient getPlaidClient() {
+        return PlaidClient.newBuilder()
+                .clientIdAndSecret(clientId, clientSecret)
+                .publicKey(publicKey) // optional. only needed to call endpoints that require a public key
+                .sandboxBaseUrl() // or equivalent, depending on which environment you're calling into
+                .build();
     }
 }

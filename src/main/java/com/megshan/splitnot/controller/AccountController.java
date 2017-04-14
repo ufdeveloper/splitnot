@@ -18,7 +18,8 @@ import static org.springframework.http.HttpStatus.OK;
 
 
 /**
- * Controller for adding/deleting accounts with plaid.
+ * Controller for managing accounts for users registered with Splitnot.
+ *
  */
 
 @Slf4j
