@@ -3,6 +3,7 @@ package com.megshan.splitnot.config;
 import com.plaid.client.PlaidClient;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,13 +13,17 @@ import org.springframework.context.annotation.Configuration;
  */
 
 @Configuration
-@ConfigurationProperties(prefix = "plaid.client")
 @Getter
 @Setter
 public class PlaidClientConfig {
 
+    @Value("${plaid.client.id}")
     private String clientId;
+
+    @Value("${plaid.secret}")
     private String clientSecret;
+
+    @Value("${plaid.public.key}")
     private String publicKey;
 
     @Bean

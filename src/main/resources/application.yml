@@ -1,7 +1,2 @@
 plaid:
-  client:
-    clientId: 5511172f0effc0670b8c932e
-    clientSecret: 0ed931236e23173357f617045262aa
-    publicKey: a9536dd5db33d7bbbdb096c56a1593 #sandbox public key
-
   plaidurl: https://sandbox.plaid.com
