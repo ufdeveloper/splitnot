@@ -33,9 +33,21 @@ public class TokenController {
 
     @RequestMapping(value = "/users/{userKey}/accesstokens", params = {"publictoken"}, method = RequestMethod.POST)
     @ResponseStatus(OK)
-    public void createAccessToken(@PathVariable("userKey") String userKey,
+    public String createAccessToken(@PathVariable("userKey") String userKey,
                                   @RequestParam(value = "publictoken", required = true) String publicToken) throws IOException{
         log.info("addAccessTokenForPublicKey request received");
-        tokenService.createAccessToken(userKey, publicToken);
+        return tokenService.createAccessToken(userKey, publicToken);
+    }
+
+
+    /**
+     * Temporary API to test webhook callbacks in conjunction with ngrok.
+     * Move this to an integration test later.
+     */
+    @RequestMapping(value = "/createItem", method = RequestMethod.POST)
+    @ResponseStatus(OK)
+    public void createItem() throws IOException{
+        log.info("createItem request received");
+        tokenService.createItem();
     }
 }

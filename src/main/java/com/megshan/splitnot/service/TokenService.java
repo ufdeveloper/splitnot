@@ -7,5 +7,7 @@ import java.io.IOException;
  */
 public interface TokenService {
 
-    void createAccessToken(String userKey, String publicToken) throws IOException;
+    String createAccessToken(String userKey, String publicToken) throws IOException;
+
+    void createItem() throws IOException;
 }

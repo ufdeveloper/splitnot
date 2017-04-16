@@ -14,4 +14,5 @@ public class UserInstitution {
 
     String userKey;
     String institutionKey;
+    String item;
 }
