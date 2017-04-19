@@ -1,8 +1,5 @@
 package com.megshan.splitnot.service;
 
-import com.megshan.splitnot.domain.Account;
-import com.plaid.client.response.Institution;
-
 import java.util.List;
 
 /**

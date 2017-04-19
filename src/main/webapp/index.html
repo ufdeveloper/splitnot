@@ -33,13 +33,6 @@
 
 <div id="app">
     <div class="box">
-      <textarea id="public-token"></textarea>
-    </div>
-    <div>
-      <textarea id="public-token-metadata"></textarea>
-    </div>
-    
-    <div class="box">
       <button id="get-accounts-btn">Get Accounts</button>
       <div id="get-accounts-data"></div>
     </div>
@@ -58,11 +51,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
 <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
-<script src="scripts/components/requirejs/require.js" data-main="scripts/main"></script>
-   <script>
-
-  var envvar = require('envvar');
-  var PLAID_PUBLIC_KEY = envvar.string('plaid.public.key');
+<script>
 
   function getParameterByName(name, url) {
     if (!url) url = window.location.href;
@@ -77,12 +66,12 @@
     var handler = Plaid.create({
       apiVersion: 'v2',
       clientName: 'Splitnot',
-      env: 'sandbox',
+      env: 'development',
       product: ['transactions'],
-      key: '<%= PLAID_PUBLIC_KEY %>',
+      key: 'ed677c5c8e05864264b34296265933',
       webhook: 'http://776575f8.ngrok.io/splitnot/webhook',
       onSuccess: function(public_token, metadata) {
-        $.post('http://localhost:8080/users/1234/accesstokens', {
+        $.post('/accesstokens', {
           publictoken: public_token
         }, function() {
           $('#container').fadeOut('fast', function() {
@@ -90,9 +79,6 @@
             $('#app, #steps').fadeIn('slow');
           });
         });
-        console.log('public_token=' + public_token);
-        $('#public-token').val(public_token);
-        $('#public-token-metadata').val(metadata);
       },
     });
 
@@ -101,6 +87,7 @@
     });
 
     var accessToken = getParameterByName('access_token');
+    console.log("accessToken = " + accessToken);
     if (accessToken != null) {
       $.post('/set_access_token', {
         access_token: accessToken
@@ -113,10 +100,10 @@
     }
 
     $('#get-accounts-btn').on('click', function(e) {
-      $.get('/accounts', function(data) {
+      $.get('/accounts', function(accounts) {
         $('#get-accounts-data').slideUp(function() {
           var html = '';
-          data.accounts.forEach(function(account, idx) {
+          accounts.forEach(function(account, idx) {
             html += '<div class="inner">';
             html += '<strong>' + account.name +
               ' $' + (account.balances.available != null ? account.balances.available : account.balances.current) + '</strong><br>';
@@ -130,29 +117,35 @@
     });
 
     $('#get-item-btn').on('click', function(e) {
-      $.post('/item', function(data) {
+      $.get('/item', function(data) {
         $('#upgrade-to-connect-data').slideUp(function() {
           if (data.error)
             $(this).html('<p>' + data.error + '</p>').slideDown();
           else {
-            var html = '';
-            html += '<p>Here\'s some basic information about your Item:</p>';
-            html += '<p>Institution name:' + data.institution.name + '</p>';
-            html += '<p>Billed products: ' + data.item.billed_products.join(', ') + '</p>';
-            html += '<p>Available products: ' + data.item.available_products.join(', ') + '</p>';
+            $.get('/institutions/'+data.institutionId, function(institutionData){
+              if (institutionData.error)
+                $(this).html('<p>' + institutionData.error + '</p>').slideDown();
+              else {
+                var html = '';
+                html += '<p>Here\'s some basic information about your Item:</p>';
+                html += '<p>Institution name:' + institutionData.name + '</p>';
+                html += '<p>Billed products: ' + data.billedProducts.join(', ') + '</p>';
+                html += '<p>Available products: ' + data.availableProducts.join(', ') + '</p>';
 
-            $(this).html(html).slideDown();
-            $('#txnBox').slideDown();
+                $(this).html(html).slideDown();
+                $('#txnBox').slideDown();
+              }
+            });
           }
         });
       });
     });
 
     $('#get-transaction-data').on('click', function(e) {
-      $.post('/transactions', function(data) {
+      $.get('/transactions', function(transactions) {
         $('#get-transactions-data').slideUp(function() {
           var html = '';
-          data.transactions.forEach(function(txn, idx) {
+          transactions.forEach(function(txn, idx) {
             html += '<div class="inner">';
             html += '<strong>' + txn.name + '</strong><br>';
             html += '$' + txn.amount;
