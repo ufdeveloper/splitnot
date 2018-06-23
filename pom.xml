@@ -33,12 +33,13 @@
             <artifactId>lombok</artifactId>
             <version>1.16.12</version>
         </dependency>
-
+        
         <dependency>
             <groupId>com.plaid</groupId>
-            <artifactId>plaid-java-apiv2</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <artifactId>plaid-java</artifactId>
+            <version>3.0.2</version>
         </dependency>
+
     </dependencies>
 
     <properties>

@@ -31,7 +31,7 @@ public class PlaidClientConfig {
         return PlaidClient.newBuilder()
                 .clientIdAndSecret(clientId, clientSecret)
                 .publicKey(publicKey) // optional. only needed to call endpoints that require a public key
-                .sandboxBaseUrl() // or equivalent, depending on which environment you're calling into
+                .developmentBaseUrl() // or equivalent, depending on which environment you're calling into
                 .build();
     }
 }
