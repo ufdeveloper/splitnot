@@ -1,6 +1,7 @@
-package com.megshan.splitnot.dto;
+package com.megshan.splitnot.dto.converters;
 
 import com.megshan.splitnot.domain.User;
+import com.megshan.splitnot.dto.UserDTO;
 
 import java.util.ArrayList;
 import java.util.List;
