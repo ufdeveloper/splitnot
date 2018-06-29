@@ -1,2 +1,7 @@
 plaid:
   plaidurl: https://sandbox.plaid.com
+
+com.megshan.splitnot.config:
+  dynamoDB:
+     accessKeyId:
+     secretAccessKey: 
