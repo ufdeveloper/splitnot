@@ -3,5 +3,6 @@ plaid:
 
 com.megshan.splitnot.config:
   dynamoDB:
-     accessKeyId:
-     secretAccessKey: 
+     tableNamePrefix: splitnot-
+     accessKeyId: AKIAJYGJWFPFOV6BGDXA
+     secretAccessKey: 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

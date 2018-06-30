@@ -48,7 +48,7 @@ public class UserDaoImpl implements UserDao {
             return dynamoDBMapper.load(User.class, userKey);
         }
         catch(Exception e) {
-            log.error("Failed to load user for userKey=" + userKey + ", exception=" + e);
+             log.error("Failed to load user for userKey=" + userKey + ", exception=" + e);
             throw new UserDaoException( "Failed to get user for userKey=" + userKey);
         }
     }

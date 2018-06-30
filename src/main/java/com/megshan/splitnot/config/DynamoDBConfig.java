@@ -30,20 +30,30 @@ public class DynamoDBConfig {
 
     @Bean
     public DynamoDBMapper dynamoDBMapper() {
-        DynamoDBMapperConfig dynamoDBMapperConfig = new DynamoDBMapperConfig.Builder().build();
+
+        String tableNamePrefix = applicationProperties.getDynamoDB().getTableNamePrefix();
+
+        DynamoDBMapperConfig dynamoDBMapperConfig = new DynamoDBMapperConfig.Builder()
+                .withTableNameOverride(DynamoDBMapperConfig.TableNameOverride.withTableNamePrefix(tableNamePrefix))
+                .build();
+
         return new DynamoDBMapper(amazonDynamoDBClient(), dynamoDBMapperConfig);
     }
 
     private AmazonDynamoDB amazonDynamoDBClient() {
+
         return AmazonDynamoDBClientBuilder.standard()
                 .withCredentials(awsCredentialsProvider())
                 .withRegion(Regions.US_WEST_2).build();
     }
 
     private AWSCredentialsProvider awsCredentialsProvider() {
+
         String accessKeyId = applicationProperties.getDynamoDB().getAccessKeyId();
         String secretAccessKey = applicationProperties.getDynamoDB().getSecretAccessKey();
+
         BasicAWSCredentials basicAWSCredentials = new BasicAWSCredentials(accessKeyId, secretAccessKey);
+
         return new AWSStaticCredentialsProvider(basicAWSCredentials);
     }
 }
