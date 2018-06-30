@@ -56,5 +56,11 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void addUser(User user) {
 
+        try {
+            dynamoDBMapper.save(user);
+        } catch (Exception e) {
+            log.error("Unexpected exception while saving user to DB, user=" + user + ", exception=" + e);
+            throw new UserDaoException(e.getMessage());
+        }
     }
 }

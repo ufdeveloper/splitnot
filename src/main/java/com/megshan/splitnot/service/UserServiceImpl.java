@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by shantanu on 6/28/18.
@@ -40,6 +42,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addUser(User user) {
 
+        log.info("generating userKey for new user, user=" + user);
+
+        // TODO - use better random num generator scheme.
+        Long userKey = ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        user.setUserKey(userKey);
+
+        // TODO - check if user already exists before adding.
         userDao.addUser(user);
         log.info("Successfully added user=" + user);
     }

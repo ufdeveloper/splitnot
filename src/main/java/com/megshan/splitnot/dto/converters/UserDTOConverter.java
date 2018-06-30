@@ -15,7 +15,7 @@ public class UserDTOConverter {
     public static User convertToUser(UserDTO userDTO) {
 
         User user = new User();
-        user.setFirstName(userDTO.getFisrtName());
+        user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
 
         return user;
@@ -25,7 +25,7 @@ public class UserDTOConverter {
     public static UserDTO convertToUserDTO(User user) {
 
         UserDTO userDTO = new UserDTO();
-        userDTO.setFisrtName(user.getFirstName());
+        userDTO.setFirstName(user.getFirstName());
         userDTO.setLastName(user.getLastName());
 
         return userDTO;
@@ -38,7 +38,7 @@ public class UserDTOConverter {
 
         for(User user : users) {
             UserDTO userDTO = new UserDTO();
-            userDTO.setFisrtName(user.getFirstName());
+            userDTO.setFirstName(user.getFirstName());
             userDTO.setLastName(user.getLastName());
             userDTOList.add(userDTO);
         }
