@@ -49,7 +49,8 @@ public class TokenServiceImpl implements TokenService {
         }
 
         String accessToken = response.body().getAccessToken();
-        log.info("Retrieved accessToken=" + accessToken + " for publicToken=" + publicToken);
+        String itemId = response.body().getItemId();
+        log.info("Retrieved accessToken=" + accessToken + "and itemId=" + itemId + " for publicToken=" + publicToken);
         return accessToken;
     }
 

@@ -23,23 +23,32 @@ public class ItemServiceImpl implements ItemService {
     @Autowired
     private PlaidClient plaidClient;
 
-    @Autowired
-    private TokenService tokenService;
-
     @Override
-    public ItemStatus getItem() throws IOException{
+    public ItemStatus getItem(String accessToken) throws IOException{
         Response<ItemGetResponse> response =
-                plaidClient.service().itemGet(new ItemGetRequest(tokenService.getAccessToken())).execute();
+                plaidClient.service().itemGet(new ItemGetRequest(accessToken)).execute();
 
         if(!response.isSuccessful()) {
-            log.error("Error retrieving item with accessToken=" + tokenService.getAccessToken()
+            log.error("Error retrieving item with accessToken=" + accessToken
                     + ", errorMessage=" + response.errorBody().string());
             return null;
         }
 
         ItemStatus item = response.body().getItem();
-        log.info("Retrieved itemId=" + item.getItemId());
+        log.info("Retrieved itemId=" + item.getItemId()
+                + ", institutionId=" + item.getInstitutionId()
+                + ", availableProducts=" + item.getAvailableProducts()
+                + ", billedProducts=" + item.getBilledProducts()
+                + ", webhook=" + item.getWebhook());
 
         return item;
     }
+
+    @Override
+    public List<ItemStatus> getItemsForUser(String userKey) {
+
+
+
+    }
+
 }
