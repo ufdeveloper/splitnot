@@ -14,6 +14,7 @@ import retrofit2.Response;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by shantanu on 4/19/17.
@@ -24,6 +25,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Autowired
     private ItemDao itemDao;
+
+    @Autowired
+    private TokenService tokenService;
 
 //    @Autowired
 //    private PlaidClient plaidClient;
@@ -67,4 +71,14 @@ public class ItemServiceImpl implements ItemService {
         log.info("Successfully added item=" + item);
     }
 
+    @Override
+    public void addItemForPublicToken(String publicToken) {
+
+        // Fetch accessToken and itemId for publicToken
+        Map<String, String> tokenExchangeResponse = tokenService.exchangePublicToken(publicToken);
+
+        // TODO - validate item before saving
+        itemDao.addItem(item);
+        log.info("Successfully added item=" + item);
+    }
 }

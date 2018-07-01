@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,7 +34,7 @@ public class UserController {
 
     @GetMapping(value = "/users")
     @ResponseStatus(OK)
-    public @ResponseBody List<UserDTO> getUsers() {
+    public List<UserDTO> getUsers() {
         log.info("getUsers request received");
         List<User> users = userService.getUsers();
         return UserDTOConverter.convertToUserDTOList(users);
@@ -43,7 +42,7 @@ public class UserController {
 
     @GetMapping(value = "/users/{userKey}")
     @ResponseStatus(OK)
-    public @ResponseBody UserDTO getUser(@PathVariable("userKey") Long userKey) {
+    public UserDTO getUser(@PathVariable("userKey") Long userKey) {
         log.info("getUser request received for userKey=" + userKey);
         User user = userService.getUser(userKey);
         return UserDTOConverter.convertToUserDTO(user);

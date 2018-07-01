@@ -20,7 +20,7 @@ import static org.springframework.http.HttpStatus.OK;
  */
 @RestController
 @Slf4j
-public class TokenController {
+public class PlaidController {
 
     @Autowired
     private TokenService tokenService;
@@ -28,9 +28,8 @@ public class TokenController {
     @PostMapping(value = "/accesstokens")
     @ResponseStatus(OK)
     public String createAccessToken(@RequestParam(value = "publictoken", required = true) String publicToken) throws IOException{
-        log.info("createAccessToken request received");
+        log.info("createAccessToken request received for publicToken=" + publicToken);
         String accessToken = tokenService.createAccessToken(publicToken);
-        tokenService.setAccessToken(accessToken);
         return accessToken;
     }
 

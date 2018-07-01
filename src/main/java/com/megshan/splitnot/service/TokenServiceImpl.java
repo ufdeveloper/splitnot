@@ -1,5 +1,6 @@
 package com.megshan.splitnot.service;
 
+import com.megshan.splitnot.exceptions.TokenServiceException;
 import com.plaid.client.PlaidClient;
 import com.plaid.client.internal.gson.Optional;
 import com.plaid.client.request.ItemCreateRequest;
@@ -18,6 +19,8 @@ import retrofit2.Response;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by shantanu on 4/14/17.
@@ -36,22 +39,43 @@ public class TokenServiceImpl implements TokenService {
     private PlaidClient plaidClient;
 
     @Override
-    public String createAccessToken(String publicToken) throws IOException{
+    public Map<String, String> exchangePublicToken(String publicToken) {
 
-        //get access token for publicToken
-        Response<ItemPublicTokenExchangeResponse> response =
-                plaidClient.service().itemPublicTokenExchange(new ItemPublicTokenExchangeRequest(publicToken)).execute();
+        Response<ItemPublicTokenExchangeResponse> response = null;
+        try {
+            //get access token for publicToken
+            response = plaidClient.service().itemPublicTokenExchange(new ItemPublicTokenExchangeRequest(publicToken)).execute();
+        } catch (IOException ioe) {
+
+            log.error("Error exchanging publicToken for accessToken, publicToken=" + publicToken, ", exception=" + ioe);
+            throw new TokenServiceException(ioe.getMessage());
+        }
 
         if(!response.isSuccessful()) {
+
+            String tokenExchangeError = "";
+
+            try {
+                tokenExchangeError = response.errorBody().string();
+            } catch (IOException ioe) {
+                log.error("Error retrieving error message for public token exchange failure, publicToken=" + publicToken
+                        + ", exception=" + ioe);
+                throw new TokenServiceException(ioe.getMessage());
+            }
+
             log.error("Error retrieving access token for publicToken=" + publicToken
-                    + ", errorMessage=" + response.errorBody().string());
-            return null;
+                    + ", exception=" + tokenExchangeError);
+            throw new TokenServiceException(tokenExchangeError);
         }
 
         String accessToken = response.body().getAccessToken();
         String itemId = response.body().getItemId();
         log.info("Retrieved accessToken=" + accessToken + "and itemId=" + itemId + " for publicToken=" + publicToken);
-        return accessToken;
+
+        Map<String, String> tokenExchangeResponse = new HashMap<>();
+        tokenExchangeResponse.put("accessToken", accessToken);
+        tokenExchangeResponse.put("itemId", itemId);
+        return tokenExchangeResponse;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.megshan.splitnot.data;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.megshan.splitnot.domain.User;
 import com.megshan.splitnot.exceptions.UserDaoException;
 import lombok.extern.slf4j.Slf4j;
@@ -18,27 +19,25 @@ import java.util.List;
 @Repository
 public class UserDaoImpl implements UserDao {
 
+    private static final Integer USERS_SCAN_LIMIT = 5;
+
     @Autowired
     private DynamoDBMapper dynamoDBMapper;
 
     @Override
     public List<User> getUsers() {
 
-//        DynamoDBQueryExpression<User> expr = new DynamoDBQueryExpression<User>()
-//                .withConsistentRead(false)
-//                .withIndexName("userKey");
-//
-//        try {
-//            return dynamoDBMapper.query( User.class, expr );
-//        }
-//        catch( Exception e ) {
-//
-//            throw new UserDaoException( "Failed to get users for target="
-//                    + Registration.registrationTarget( product, resourceType, productReferenceKey ),
-//                    e );
-//        }
+        DynamoDBScanExpression dynamoDBScanExpression = new DynamoDBScanExpression()
+                .withConsistentRead(false)
+                .withLimit(USERS_SCAN_LIMIT);
 
-        return null;
+        try {
+            return dynamoDBMapper.scan(User.class, dynamoDBScanExpression);
+        }
+        catch( Exception e ) {
+            log.error("Failed to scan users from table, exception=" + e);
+            throw new UserDaoException( "Failed to scan users from table, exception=" + e);
+        }
     }
 
     @Override
@@ -48,7 +47,7 @@ public class UserDaoImpl implements UserDao {
             return dynamoDBMapper.load(User.class, userKey);
         }
         catch(Exception e) {
-             log.error("Failed to load user for userKey=" + userKey + ", exception=" + e);
+            log.error("Failed to load user for userKey=" + userKey + ", exception=" + e);
             throw new UserDaoException( "Failed to get user for userKey=" + userKey);
         }
     }

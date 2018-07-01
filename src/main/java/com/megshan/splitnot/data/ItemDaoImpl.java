@@ -2,6 +2,8 @@ package com.megshan.splitnot.data;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.util.ImmutableMapParameter;
 import com.megshan.splitnot.domain.Item;
 import com.megshan.splitnot.domain.User;
 import com.megshan.splitnot.exceptions.UserDaoException;
@@ -28,7 +30,12 @@ public class ItemDaoImpl implements ItemDao {
         DynamoDBQueryExpression<Item> dynamoDBQueryExpression
                 = new DynamoDBQueryExpression<Item>()
                 .withConsistentRead(false)
-                .withIndexName("userKey");
+                .withKeyConditionExpression("userKey = :userKey")
+                .withExpressionAttributeValues(
+                        ImmutableMapParameter.of(
+                                ":userKey", new AttributeValue(userKey.toString())
+                        )
+                );
 
         try {
             return dynamoDBMapper.query(Item.class, dynamoDBQueryExpression);

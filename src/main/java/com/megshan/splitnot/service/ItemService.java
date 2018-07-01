@@ -14,4 +14,6 @@ public interface ItemService {
     List<Item> getItemsForUser(Long userKey);
 
     void addItem(Item item);
+
+    void addItemForPublicToken(String publicToken);
 }

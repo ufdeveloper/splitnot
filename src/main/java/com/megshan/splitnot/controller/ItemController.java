@@ -4,6 +4,7 @@ import com.megshan.splitnot.domain.Item;
 import com.megshan.splitnot.dto.ItemDTO;
 import com.megshan.splitnot.dto.converters.ItemDTOConverter;
 import com.megshan.splitnot.service.ItemService;
+import com.megshan.splitnot.service.TokenService;
 import com.plaid.client.response.ItemStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +40,18 @@ public class ItemController {
         return ItemDTOConverter.convertToItemDTOList(items);
     }
 
-    @PostMapping
+//    @PostMapping(value = "/items")
+//    @ResponseStatus(CREATED)
+//    public void addItem(@RequestBody Item item) {
+//        log.info("addItem request received with item=" + item);
+//        itemService.addItem(item);
+//    }
+
+    @PostMapping(value = "/items")
     @ResponseStatus(CREATED)
-    public void addItem(@RequestBody Item item) {
-        log.info("addItem request received with item=" + item);
-        itemService.addItem(item);
+    public void addItemForPublicToken(String publicToken) {
+        log.info("addItemForPublicToken request received with publicToken=" + publicToken);
+        itemService.addItemForPublicToken(publicToken);
     }
 
 }

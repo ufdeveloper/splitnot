@@ -11,6 +11,7 @@ import lombok.Data;
 @Data
 public class UserDTO {
 
+    private String userKey;
     private String firstName;
     private String lastName;
 }

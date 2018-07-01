@@ -15,6 +15,7 @@ public class UserDTOConverter {
     public static User convertToUser(UserDTO userDTO) {
 
         User user = new User();
+        user.setUserKey(Long.valueOf(userDTO.getUserKey()));
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
 
@@ -25,6 +26,7 @@ public class UserDTOConverter {
     public static UserDTO convertToUserDTO(User user) {
 
         UserDTO userDTO = new UserDTO();
+        userDTO.setUserKey(user.getUserKey().toString());
         userDTO.setFirstName(user.getFirstName());
         userDTO.setLastName(user.getLastName());
 
