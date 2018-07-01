@@ -17,6 +17,13 @@ public interface ItemDao {
 
     /**
      *
+     * @param itemId
+     * @return
+     */
+    Item getItem(Long userKey, String itemId);
+
+    /**
+     *
      */
     void addItem(Item item);
 }

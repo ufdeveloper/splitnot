@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
@@ -32,12 +33,20 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
-    @GetMapping(value= "/items")
+    @GetMapping(value= "/items", params = "userKey")
     @ResponseStatus(OK)
-    public @ResponseBody List<ItemDTO> getItemsForUser(@RequestParam Long userKey) {
+    public @ResponseBody List<ItemDTO> getItemsForUser(Long userKey) {
         log.info("getItemsForUser request received for userKey=" + userKey);
         List<Item> items = itemService.getItemsForUser(userKey);
         return ItemDTOConverter.convertToItemDTOList(items);
+    }
+
+    @GetMapping(value= "/items", params = {"userKey", "itemId"})
+    @ResponseStatus(OK)
+    public @ResponseBody ItemDTO getItem(Long userKey, String itemId) {
+        log.info("getItem request received for userKey=" + userKey + " and itemId=" + itemId);
+        Item item = itemService.getItem(userKey, itemId);
+        return ItemDTOConverter.convertToItemDTO(item);
     }
 
 //    @PostMapping(value = "/items")
@@ -49,9 +58,9 @@ public class ItemController {
 
     @PostMapping(value = "/items")
     @ResponseStatus(CREATED)
-    public void addItemForPublicToken(String publicToken) {
-        log.info("addItemForPublicToken request received with publicToken=" + publicToken);
-        itemService.addItemForPublicToken(publicToken);
+    public void addItemForPublicToken(@RequestBody Map<String, String> publicTokenRequest) {
+        log.info("addItemForPublicToken request received with publicTokenRequest=" + publicTokenRequest);
+        itemService.addItemForPublicToken(publicTokenRequest);
     }
 
 }

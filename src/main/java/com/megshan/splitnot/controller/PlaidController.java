@@ -25,13 +25,13 @@ public class PlaidController {
     @Autowired
     private TokenService tokenService;
 
-    @PostMapping(value = "/accesstokens")
-    @ResponseStatus(OK)
-    public String createAccessToken(@RequestParam(value = "publictoken", required = true) String publicToken) throws IOException{
-        log.info("createAccessToken request received for publicToken=" + publicToken);
-        String accessToken = tokenService.createAccessToken(publicToken);
-        return accessToken;
-    }
+//    @PostMapping(value = "/accesstokens")
+//    @ResponseStatus(OK)
+//    public String createAccessToken(@RequestParam(value = "publictoken", required = true) String publicToken) throws IOException{
+//        log.info("createAccessToken request received for publicToken=" + publicToken);
+//        String accessToken = tokenService.createAccessToken(publicToken);
+//        return accessToken;
+//    }
 
 
     /**
