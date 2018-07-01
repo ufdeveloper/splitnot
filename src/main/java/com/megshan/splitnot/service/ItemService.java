@@ -1,5 +1,6 @@
 package com.megshan.splitnot.service;
 
+import com.megshan.splitnot.domain.Item;
 import com.plaid.client.response.ItemStatus;
 
 import java.io.IOException;
@@ -10,5 +11,7 @@ import java.util.List;
  */
 public interface ItemService {
 
-    List<ItemStatus> getItemsForUser(String userKey);
+    List<Item> getItemsForUser(Long userKey);
+
+    void addItem(Item item);
 }

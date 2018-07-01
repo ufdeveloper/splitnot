@@ -1,5 +1,7 @@
 package com.megshan.splitnot.service;
 
+import com.megshan.splitnot.data.ItemDao;
+import com.megshan.splitnot.domain.Item;
 import com.plaid.client.PlaidClient;
 import com.plaid.client.request.ItemGetRequest;
 import com.plaid.client.response.Account;
@@ -21,34 +23,48 @@ import java.util.List;
 public class ItemServiceImpl implements ItemService {
 
     @Autowired
-    private PlaidClient plaidClient;
+    private ItemDao itemDao;
+
+//    @Autowired
+//    private PlaidClient plaidClient;
+
+//    @Override
+//    public ItemStatus getItem(String accessToken) throws IOException{
+//        Response<ItemGetResponse> response =
+//                plaidClient.service().itemGet(new ItemGetRequest(accessToken)).execute();
+//
+//        if(!response.isSuccessful()) {
+//            log.error("Error retrieving item with accessToken=" + accessToken
+//                    + ", errorMessage=" + response.errorBody().string());
+//            return null;
+//        }
+//
+//        ItemStatus item = response.body().getItem();
+//        log.info("Retrieved itemId=" + item.getItemId()
+//                + ", institutionId=" + item.getInstitutionId()
+//                + ", availableProducts=" + item.getAvailableProducts()
+//                + ", billedProducts=" + item.getBilledProducts()
+//                + ", webhook=" + item.getWebhook());
+//
+//        return item;
+//    }
 
     @Override
-    public ItemStatus getItem(String accessToken) throws IOException{
-        Response<ItemGetResponse> response =
-                plaidClient.service().itemGet(new ItemGetRequest(accessToken)).execute();
+    public List<Item> getItemsForUser(Long userKey) {
 
-        if(!response.isSuccessful()) {
-            log.error("Error retrieving item with accessToken=" + accessToken
-                    + ", errorMessage=" + response.errorBody().string());
-            return null;
-        }
+        List<Item> items = itemDao.getItems(userKey);
+        log.info("Successfully retrieved " + items.size() + " items for userKey=" + userKey);
 
-        ItemStatus item = response.body().getItem();
-        log.info("Retrieved itemId=" + item.getItemId()
-                + ", institutionId=" + item.getInstitutionId()
-                + ", availableProducts=" + item.getAvailableProducts()
-                + ", billedProducts=" + item.getBilledProducts()
-                + ", webhook=" + item.getWebhook());
+        return items;
 
-        return item;
     }
 
     @Override
-    public List<ItemStatus> getItemsForUser(String userKey) {
+    public void addItem(Item item) {
 
-
-
+        // TODO - validate item before saving
+        itemDao.addItem(item);
+        log.info("Successfully added item=" + item);
     }
 
 }

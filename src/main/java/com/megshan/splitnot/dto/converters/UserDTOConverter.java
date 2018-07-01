@@ -37,10 +37,7 @@ public class UserDTOConverter {
         List<UserDTO> userDTOList = new ArrayList<>();
 
         for(User user : users) {
-            UserDTO userDTO = new UserDTO();
-            userDTO.setFirstName(user.getFirstName());
-            userDTO.setLastName(user.getLastName());
-            userDTOList.add(userDTO);
+            userDTOList.add(convertToUserDTO(user));
         }
 
         return userDTOList;
