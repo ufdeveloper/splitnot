@@ -53,7 +53,7 @@ public class TokenServiceImpl implements TokenService {
 
         if(!response.isSuccessful()) {
 
-            String tokenExchangeError = "";
+            String tokenExchangeError;
 
             try {
                 tokenExchangeError = response.errorBody().string();

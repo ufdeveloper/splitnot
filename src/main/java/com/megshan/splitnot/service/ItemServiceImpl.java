@@ -2,6 +2,7 @@ package com.megshan.splitnot.service;
 
 import com.megshan.splitnot.data.ItemDao;
 import com.megshan.splitnot.domain.Item;
+import com.megshan.splitnot.exceptions.InternalServerErrorException;
 import com.plaid.client.PlaidClient;
 import com.plaid.client.request.ItemGetRequest;
 import com.plaid.client.response.Account;
@@ -29,8 +30,8 @@ public class ItemServiceImpl implements ItemService {
     @Autowired
     private TokenService tokenService;
 
-//    @Autowired
-//    private PlaidClient plaidClient;
+    @Autowired
+    private PlaidClient plaidClient;
 
 //    @Override
 //    public ItemStatus getItem(String accessToken) throws IOException{
@@ -64,6 +65,23 @@ public class ItemServiceImpl implements ItemService {
     public Item getItem(Long userKey, String itemId) {
         Item item = itemDao.getItem(userKey, itemId);
         log.info("Successfully retrieved item=" + item + " for userKey=" + userKey + " and itemId=" + itemId);
+
+        ItemGetRequest itemGetRequest = new ItemGetRequest(item.getAccessToken());
+        Response<ItemGetResponse> itemGetResponse;
+        try {
+           itemGetResponse = plaidClient.service().itemGet(itemGetRequest).execute();
+        } catch (IOException ioe) {
+            log.error("Error getting item from plaid client for userKey=" + userKey
+                    + " and itemId=" + itemId + ", error=" + ioe);
+            throw new InternalServerErrorException(ioe.getMessage());
+        }
+
+        ItemStatus itemStatus = itemGetResponse.body().getItem();
+        log.info("Retrieved availableProducts=" + itemStatus.getAvailableProducts()
+                + ", billedProducts=" + itemStatus.getBilledProducts()
+                + ", institutionId=" + itemStatus.getInstitutionId()
+                + ", webhook=" + itemStatus.getWebhook());
+
         return item;
     }
 
