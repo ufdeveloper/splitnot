@@ -28,4 +28,7 @@ public class Item {
 
     @DynamoDBAttribute
     String accessToken;
+
+    @DynamoDBAttribute
+    String itemName;
 }

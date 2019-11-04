@@ -86,18 +86,20 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void addItem(Item item) {
+    public Item addItem(Item item) {
 
         // TODO - validate item before saving
         itemDao.addItem(item);
         log.info("Successfully added item=" + item);
+        return item;
     }
 
     @Override
-    public void addItemForPublicToken(Map<String, String> publicTokenRequest) {
+    public Item addItemForPublicToken(Map<String, String> publicTokenRequest) {
 
         String publicToken = publicTokenRequest.get("publicToken");
         Long userKey = Long.valueOf(publicTokenRequest.get("userKey"));
+        String itemName = publicTokenRequest.get("itemName");
 
         // Fetch accessToken and itemId for publicToken
         Map<String, String> tokenExchangeResponse = tokenService.exchangePublicToken(publicToken);
@@ -106,8 +108,10 @@ public class ItemServiceImpl implements ItemService {
         item.setItemId(tokenExchangeResponse.get("itemId"));
         item.setAccessToken(tokenExchangeResponse.get("accessToken"));
         item.setUserKey(userKey);
+        item.setItemName(itemName);
 
         itemDao.addItem(item);
         log.info("Successfully added item=" + item);
+        return item;
     }
 }

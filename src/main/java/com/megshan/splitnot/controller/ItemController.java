@@ -51,16 +51,18 @@ public class ItemController {
 
 //    @PostMapping(value = "/items")
 //    @ResponseStatus(CREATED)
-//    public void addItem(@RequestBody Item item) {
+//    public ItemDTO addItem(@RequestBody Item item) {
 //        log.info("addItem request received with item=" + item);
-//        itemService.addItem(item);
+//        Item savedItem = itemService.addItem(item);
+//        return ItemDTOConverter.convertToItemDTO(savedItem);
 //    }
 
     @PostMapping(value = "/items")
     @ResponseStatus(CREATED)
-    public void addItemForPublicToken(@RequestBody Map<String, String> publicTokenRequest) {
+    public ItemDTO addItemForPublicToken(@RequestBody Map<String, String> publicTokenRequest) {
         log.info("addItemForPublicToken request received with publicTokenRequest=" + publicTokenRequest);
-        itemService.addItemForPublicToken(publicTokenRequest);
+        Item savedItem = itemService.addItemForPublicToken(publicTokenRequest);
+        return ItemDTOConverter.convertToItemDTO(savedItem);
     }
 
 }

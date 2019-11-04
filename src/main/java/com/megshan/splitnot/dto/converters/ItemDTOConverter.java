@@ -19,6 +19,7 @@ public class ItemDTOConverter {
         Item item = new Item();
         item.setUserKey(itemDTO.getUserKey());
         item.setItemId(itemDTO.getItemId());
+        item.setItemName(itemDTO.getItemName());
 
         return item;
     }
@@ -29,6 +30,7 @@ public class ItemDTOConverter {
         ItemDTO itemDTO = new ItemDTO();
         itemDTO.setUserKey(item.getUserKey());
         itemDTO.setItemId(item.getItemId());
+        itemDTO.setItemName(item.getItemName());
 
         return itemDTO;
     }

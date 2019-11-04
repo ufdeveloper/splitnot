@@ -23,10 +23,10 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
-    @GetMapping(value = "/transactions")
+    @GetMapping(value = "/transactions", params = {"userKey"})
     @ResponseStatus(HttpStatus.OK)
-    public List<Transaction> getTransactions() throws IOException{
+    public List<Transaction> getTransactions(Long userKey) throws IOException{
         log.info("getTransactions request received");
-        return transactionService.getTransactions();
+        return transactionService.getTransactions(userKey);
     }
 }

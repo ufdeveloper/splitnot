@@ -16,7 +16,7 @@ public interface ItemService {
 
     Item getItem(Long userKey, String itemId);
 
-    void addItem(Item item);
+    Item addItem(Item item);
 
-    void addItemForPublicToken(Map<String, String> publicTokenRequest);
+    Item addItemForPublicToken(Map<String, String> publicTokenRequest);
 }

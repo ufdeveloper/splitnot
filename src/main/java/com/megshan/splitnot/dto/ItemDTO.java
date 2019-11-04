@@ -11,4 +11,5 @@ public class ItemDTO {
 
     private Long userKey;
     private String itemId;
+    private String itemName;
 }
