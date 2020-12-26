@@ -1,5 +1,6 @@
 package com.megshan.splitnot.service;
 
+import com.megshan.splitnot.dto.TransactionResponse;
 import com.plaid.client.response.TransactionsGetResponse.Transaction;
 
 import java.io.IOException;
@@ -10,5 +11,5 @@ import java.util.List;
  */
 public interface TransactionService {
 
-    List<Transaction> getTransactions() throws IOException;
+    List<TransactionResponse> getTransactions(String accountId) throws IOException;
 }

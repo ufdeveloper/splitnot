@@ -10,7 +10,7 @@ public interface TokenService {
 
     Map<String, String> exchangePublicToken(String publicToken);
 
-    void createItem() throws IOException;
+//    void createItem() throws IOException;
 
     void setAccessToken(String accessToken);
 

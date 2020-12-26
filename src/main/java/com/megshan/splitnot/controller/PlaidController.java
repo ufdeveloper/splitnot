@@ -1,6 +1,9 @@
 package com.megshan.splitnot.controller;
 
 import com.megshan.splitnot.service.TokenService;
+import com.plaid.client.PlaidClient;
+import com.plaid.client.request.LinkTokenCreateRequest;
+import com.plaid.client.response.LinkTokenCreateResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import retrofit2.Response;
 
 import java.io.IOException;
+import java.util.Collections;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -21,6 +26,9 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @Slf4j
 public class PlaidController {
+
+    @Autowired
+    private PlaidClient plaidClient;
 
     @Autowired
     private TokenService tokenService;
@@ -33,15 +41,38 @@ public class PlaidController {
 //        return accessToken;
 //    }
 
-
-    /**
-     * Temporary API to test webhook callbacks in conjunction with ngrok.
-     * Move this to an integration test later.
-     */
-    @PostMapping(value = "/createItem")
-    @ResponseStatus(OK)
-    public void createItem() throws IOException{
-        log.info("createItem request received");
-        tokenService.createItem();
+    @PostMapping(path = "/getLinkToken")
+    public LinkTokenCreateResponse getLinkToken() throws IOException {
+        // 1. Grab the client_user_id by searching for the current user in your database
+//        User userFromDB = db.find(...);
+//        String clientUserId = userFromDB.id;
+        LinkTokenCreateRequest.User user = new LinkTokenCreateRequest.User("randomUser");
+        // 2. Create a link_token for the given user
+        Response<LinkTokenCreateResponse> response =
+                plaidClient.service()
+                        .linkTokenCreate(
+                                new LinkTokenCreateRequest(
+                                        user,
+                                        "Splitnot",
+                                        Collections.singletonList("transactions"),
+                                        Collections.singletonList("US"),
+                                        "en"
+                                )
+                                        .withWebhook("https://sample.webhook.com")
+                        ).execute();
+        // 3. Send the data to the client
+        log.info("link token response={}", response);
+        return response.body();
     }
+
+//    /**
+//     * Temporary API to test webhook callbacks in conjunction with ngrok.
+//     * Move this to an integration test later.
+//     */
+//    @PostMapping(value = "/createItem")
+//    @ResponseStatus(OK)
+//    public void createItem() throws IOException{
+//        log.info("createItem request received");
+//        tokenService.createItem();
+//    }
 }
