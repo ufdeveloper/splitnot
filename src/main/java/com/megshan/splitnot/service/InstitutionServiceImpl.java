@@ -24,21 +24,21 @@ public class InstitutionServiceImpl implements InstitutionService {
     @Autowired
     private PlaidClient plaidClient;
 
-    @Override
-    public Institution getInstitutionById(String institutionId) throws IOException {
-        Response<InstitutionsGetByIdResponse> response =
-                plaidClient.service().institutionsGetById(new InstitutionsGetByIdRequest(institutionId))
-                .execute();
-
-        if(!response.isSuccessful()) {
-            log.error("Error retrieving institution with institutionId=" + institutionId
-                    + ", errorMessage=" + response.errorBody().string());
-            return null;
-        }
-
-        Institution institution = response.body().getInstitution();
-        log.info("Retrieved institutionId=" + institutionId);
-
-        return institution;
-    }
+//    @Override
+//    public Institution getInstitutionById(String institutionId) throws IOException {
+//        Response<InstitutionsGetByIdResponse> response =
+//                plaidClient.service().institutionsGetById(new InstitutionsGetByIdRequest(institutionId))
+//                .execute();
+//
+//        if(!response.isSuccessful()) {
+//            log.error("Error retrieving institution with institutionId=" + institutionId
+//                    + ", errorMessage=" + response.errorBody().string());
+//            return null;
+//        }
+//
+//        Institution institution = response.body().getInstitution();
+//        log.info("Retrieved institutionId=" + institutionId);
+//
+//        return institution;
+//    }
 }

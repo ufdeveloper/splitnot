@@ -3,10 +3,8 @@ package com.megshan.splitnot.service;
 import com.megshan.splitnot.exceptions.TokenServiceException;
 import com.plaid.client.PlaidClient;
 import com.plaid.client.internal.gson.Optional;
-import com.plaid.client.request.ItemCreateRequest;
 import com.plaid.client.request.ItemPublicTokenExchangeRequest;
 import com.plaid.client.request.common.Product;
-import com.plaid.client.response.ItemCreateResponse;
 import com.plaid.client.response.ItemPublicTokenExchangeResponse;
 import lombok.Getter;
 import lombok.Setter;
@@ -78,29 +76,29 @@ public class TokenServiceImpl implements TokenService {
         return tokenExchangeResponse;
     }
 
-    @Override
-    public void createItem() throws IOException{
-        Calendar startDate = Calendar.getInstance();
-        startDate.add(Calendar.DATE, -2);
-
-        Calendar endDate = Calendar.getInstance();
-        startDate.add(Calendar.DATE, -1);
-
-        String webhookUrl = WebHookServiceImpl.WEBHOOK_DOMAIN + WebHookServiceImpl.WEBHOOK_URL_PART;
-        ItemCreateRequest request = new ItemCreateRequest(
-                TARTAN_BANK_INSTITUTION_ID,
-                Collections.singletonList(Product.TRANSACTIONS))
-                .withCredentials("username", "user_good")
-                .withCredentials("password", "pass_good")
-                .withOptionWebhook(webhookUrl)
-                .withOptionAwaitResults(false)
-                .withOptionStartDate(startDate.getTime())
-                .withOptionEndDate(endDate.getTime());
-
-        Response<ItemCreateResponse> response = plaidClient.service().itemCreate(request).execute();
-        log.info("Item Create response=" + response.body().toString());
-
-    }
+//    @Override
+//    public void createItem() throws IOException{
+//        Calendar startDate = Calendar.getInstance();
+//        startDate.add(Calendar.DATE, -2);
+//
+//        Calendar endDate = Calendar.getInstance();
+//        startDate.add(Calendar.DATE, -1);
+//
+//        String webhookUrl = WebHookServiceImpl.WEBHOOK_DOMAIN + WebHookServiceImpl.WEBHOOK_URL_PART;
+//        ItemCreateRequest request = new ItemCreateRequest(
+//                TARTAN_BANK_INSTITUTION_ID,
+//                Collections.singletonList(Product.TRANSACTIONS))
+//                .withCredentials("username", "user_good")
+//                .withCredentials("password", "pass_good")
+//                .withOptionWebhook(webhookUrl)
+//                .withOptionAwaitResults(false)
+//                .withOptionStartDate(startDate.getTime())
+//                .withOptionEndDate(endDate.getTime());
+//
+//        Response<ItemCreateResponse> response = plaidClient.service().itemCreate(request).execute();
+//        log.info("Item Create response=" + response.body().toString());
+//
+//    }
 
     @Override
     public void setAccessToken(String accessToken) {

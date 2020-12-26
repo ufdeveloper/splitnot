@@ -9,5 +9,5 @@ import java.io.IOException;
  */
 public interface InstitutionService {
 
-    Institution getInstitutionById(String institutionId) throws IOException;
+//    Institution getInstitutionById(String institutionId) throws IOException;
 }

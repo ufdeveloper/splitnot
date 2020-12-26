@@ -24,10 +24,10 @@ public class InstitutionController {
     @Autowired
     private InstitutionService institutionService;
 
-    @GetMapping(value = "/institutions/{institutionId}")
-    @ResponseStatus(OK)
-    public Institution getInstitutionById(@PathVariable("institutionId") String institutionId) throws IOException{
-        log.info("getInstitutionById request received for institutionId=" + institutionId);
-        return institutionService.getInstitutionById(institutionId);
-    }
+//    @GetMapping(value = "/institutions/{institutionId}")
+//    @ResponseStatus(OK)
+//    public Institution getInstitutionById(@PathVariable("institutionId") String institutionId) throws IOException{
+//        log.info("getInstitutionById request received for institutionId=" + institutionId);
+//        return institutionService.getInstitutionById(institutionId);
+//    }
 }
