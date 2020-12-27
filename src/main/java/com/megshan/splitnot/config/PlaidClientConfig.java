@@ -17,10 +17,10 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 public class PlaidClientConfig {
 
-    @Value("${plaid.client.id}")
+    @Value("${plaidClientId}")
     private String clientId;
 
-    @Value("${plaid.secret}")
+    @Value("${plaidClientSecret}")
     private String clientSecret;
 
 //    @Value("${plaid.public.key}")
