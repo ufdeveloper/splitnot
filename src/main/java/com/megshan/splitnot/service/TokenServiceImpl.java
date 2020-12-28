@@ -68,7 +68,7 @@ public class TokenServiceImpl implements TokenService {
 
         String accessToken = response.body().getAccessToken();
         String itemId = response.body().getItemId();
-        log.info("Retrieved accessToken=" + accessToken + "and itemId=" + itemId + " for publicToken=" + publicToken);
+        log.info("Retrieved accessToken=" + accessToken + " and itemId=" + itemId + " for publicToken=" + publicToken);
 
         Map<String, String> tokenExchangeResponse = new HashMap<>();
         tokenExchangeResponse.put("accessToken", accessToken);

@@ -41,7 +41,7 @@ public class PlaidController {
 //        return accessToken;
 //    }
 
-    @PostMapping(path = "/getLinkToken")
+    @RequestMapping(path = "/getLinkToken", method = RequestMethod.POST)
     public LinkTokenCreateResponse getLinkToken() throws IOException {
         // 1. Grab the client_user_id by searching for the current user in your database
 //        User userFromDB = db.find(...);
@@ -58,7 +58,8 @@ public class PlaidController {
                                         Collections.singletonList("US"),
                                         "en"
                                 )
-                                        .withWebhook("https://sample.webhook.com")
+                                        .withWebhook("http://ca9fd9a85de8.ngrok.io/splitnot/webhook")   // sandbox
+                                        .withWebhook("http://ec2-54-164-66-75.compute-1.amazonaws.com:8080/splitnot/webhook") // will be replaced by https://api.splitnot.com/splitnot/webhook //TODO - rename API to /webhook instead of /splitnot/webhook
                         ).execute();
         // 3. Send the data to the client
         log.info("link token response={}", response);
