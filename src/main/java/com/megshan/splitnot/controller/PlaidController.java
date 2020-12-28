@@ -58,8 +58,9 @@ public class PlaidController {
                                         Collections.singletonList("US"),
                                         "en"
                                 )
-                                        .withWebhook("http://ca9fd9a85de8.ngrok.io/splitnot/webhook")   // sandbox
-                                        .withWebhook("http://ec2-54-164-66-75.compute-1.amazonaws.com:8080/splitnot/webhook") // will be replaced by https://api.splitnot.com/splitnot/webhook //TODO - rename API to /webhook instead of /splitnot/webhook
+//                                        .withWebhook("http://ca9fd9a85de8.ngrok.io/splitnot/webhook")   // ngrok running locally
+//                                        .withWebhook("http://ec2-54-164-66-75.compute-1.amazonaws.com:8080/splitnot/webhook") // EC2 public DNS
+                                        .withWebhook("https://api.splitnot.com/splitnot/webhook")
                         ).execute();
         // 3. Send the data to the client
         log.info("link token response={}", response);
