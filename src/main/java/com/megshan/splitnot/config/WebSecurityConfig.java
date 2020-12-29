@@ -26,7 +26,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         // More info here - https://www.baeldung.com/spring-security-cors-preflight
                 .and()
                 .authorizeRequests()    // Allow health check url public access
-                    .antMatchers("/actuator/**")
+                    .antMatchers("/actuator/**", "/webhook")
                         .permitAll()
                 .and()
                 .authorizeRequests()

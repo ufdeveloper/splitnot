@@ -18,7 +18,7 @@ import java.util.Map;
 @Service
 public class WebHookServiceImpl {
 
-    public static final String WEBHOOK_URL_PART = "/splitnot/webhook";
+    public static final String WEBHOOK_URL_PART = "/webhook";
     public static final String WEBHOOK_DOMAIN = "http://74a41d6d.ngrok.io";
 
     private static final String WEBHOOK_TYPE_TRANSACTIONS = "TRANSACTIONS";
