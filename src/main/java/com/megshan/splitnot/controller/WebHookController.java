@@ -42,7 +42,7 @@ public class WebHookController {
     @Autowired
     private WebHookServiceImpl webHookServiceImpl;
 
-    @PostMapping(value = WebHookServiceImpl.WEBHOOK_URL_PART)
+    @RequestMapping(value = WebHookServiceImpl.WEBHOOK_URL_PART, method = RequestMethod.POST)
     @ResponseStatus(OK)
     public void postToWebHook(@RequestBody WebHookResponse webHookResponse) {
         log.info("Webhook callback received from Plaid");

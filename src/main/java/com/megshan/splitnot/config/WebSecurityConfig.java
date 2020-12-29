@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    public void configure(HttpSecurity http) throws Exception {
 
         // To disable security
 //        http.authorizeRequests(authorizeRequests ->
@@ -25,6 +25,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors() // This needs to be added to exclude the OPTIONS call from needing authentication
                         // More info here - https://www.baeldung.com/spring-security-cors-preflight
                 .and()
+                .csrf()
+                    .disable()  // we do not need CSRF protection since all sensitive endpoints are protected by OAuth2 Bearer tokens
                 .authorizeRequests()    // Allow health check url public access
                     .antMatchers("/actuator/**", "/webhook")
                         .permitAll()
@@ -37,7 +39,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .jwt();
     }
 
-    // This is to allow cross origin requests from all origins. Do not allow this on production.
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
