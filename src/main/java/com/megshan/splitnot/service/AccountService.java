@@ -16,7 +16,7 @@ public interface AccountService {
     // TODO - this will be replaced by accountDao
     List<com.megshan.splitnot.domain.Account> ACCOUNTS_STORE = new ArrayList<>();
 
-    List<AccountResponse> getAccounts();
+    List<AccountResponse> getAccounts(String userId);
 
-    AccountResponse addAccount(AddAccountRequest addAccountRequest);
+    AccountResponse addAccount(String userId, AddAccountRequest addAccountRequest);
 }

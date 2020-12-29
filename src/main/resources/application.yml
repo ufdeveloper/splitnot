@@ -1,5 +1,6 @@
-plaid:
-  plaidurl: https://sandbox.plaid.com
+okta:
+  oauth2:
+    issuer: https://dev-565937.okta.com/oauth2/default
 
 com.megshan.splitnot.config:
   dynamoDB:

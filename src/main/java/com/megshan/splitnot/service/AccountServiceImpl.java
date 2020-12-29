@@ -51,15 +51,16 @@ public class AccountServiceImpl implements AccountService {
 //    }
 
     @Override
-    public List<AccountResponse> getAccounts() {
+    public List<AccountResponse> getAccounts(String userId) {
         return ACCOUNTS_STORE
                 .stream()
+                .filter(account -> account.getUserId().equals(userId))
                 .map(account -> new AccountResponse(account.getId(), account.getName()))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public AccountResponse addAccount(AddAccountRequest addAccountRequest) {
+    public AccountResponse addAccount(String userId, AddAccountRequest addAccountRequest) {
         // exchange public_token for access_token
         Map<String, String> exchangePublicTokenResponseMap = tokenService.exchangePublicToken(addAccountRequest.getPublicToken());
 
@@ -68,7 +69,8 @@ public class AccountServiceImpl implements AccountService {
                 addAccountRequest.getAccountId(),
                 addAccountRequest.getAccountName(),
                 exchangePublicTokenResponseMap.get("itemId"),
-                exchangePublicTokenResponseMap.get("accessToken"));
+                exchangePublicTokenResponseMap.get("accessToken"),
+                userId);
         ACCOUNTS_STORE.add(account);
 
         return new AccountResponse(addAccountRequest.getAccountId(), addAccountRequest.getAccountName());
