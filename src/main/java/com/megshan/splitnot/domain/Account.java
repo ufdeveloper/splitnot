@@ -10,4 +10,5 @@ public class Account {
     private String name;
     private String plaidItemId;
     private String plaidAccessToken;
+    private String userId;
 }

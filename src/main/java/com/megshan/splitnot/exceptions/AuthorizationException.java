@@ -4,10 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.HttpClientErrorException;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class NotFoundException extends HttpClientErrorException {
+@ResponseStatus(HttpStatus.UNAUTHORIZED)
+public class AuthorizationException extends HttpClientErrorException {
 
-    public NotFoundException(String message) {
-        super(HttpStatus.NOT_FOUND, message);
+    public AuthorizationException(String message) {
+        super(HttpStatus.UNAUTHORIZED, message);
     }
 }
