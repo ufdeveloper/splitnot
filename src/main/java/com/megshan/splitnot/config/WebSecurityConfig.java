@@ -27,8 +27,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf()
                     .disable()  // we do not need CSRF protection since all sensitive endpoints are protected by OAuth2 Bearer tokens
-                .authorizeRequests()    // Allow health check url public access
-                    .antMatchers("/actuator/**", "/webhook")
+                .authorizeRequests()
+                    .antMatchers("/actuator/**", "/webhook") // Allow public access to these urls
                         .permitAll()
                 .and()
                 .authorizeRequests()
