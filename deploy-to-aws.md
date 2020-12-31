@@ -34,11 +34,11 @@ Package your jar on your local machine using, `mvn package`. The jar file will b
 We will setup logging under the /var/log/tomcat directory. Application logs will be written to /var/log/tomcat/tomcat.log and access logs will be written to /var/log/tomcat/access.log
 Spring boot only logs to the console by default, so we need to update the application.yml file to be able to write to files. Check out the application.yml file in the src directory.
 
-Create the tomcat directory under /var/log
+Create the tomcat directory under /var/log. 
 `cd /var/log`
 `sudo mkdir tomcat`
 
-Change permissions to write to the directory
+Change permissions to write to the directory. 
 `sudo chmod -R a+rw tomcat`
 
 That's it, the application will now be able to write to the /var/log/tomcat directory.
