@@ -29,6 +29,20 @@ Package your jar on your local machine using, `mvn package`. The jar file will b
 
 `scp -i my-key-pair.pem splitnot-api-0.1.0.jar ec2-user@<EC2-instance-public-DNS>:~`
 
+#### Setup application and access logging
+
+We will setup logging under the /var/log/tomcat directory. Application logs will be written to /var/log/tomcat/tomcat.log and access logs will be written to /var/log/tomcat/access.log
+Spring boot only logs to the console by default, so we need to update the application.yml file to be able to write to files. Check out the application.yml file in the src directory.
+
+Create the tomcat directory under /var/log
+`cd /var/log`
+`sudo mkdir tomcat`
+
+Change permissions to write to the directory
+`sudo chmod -R a+rw tomcat`
+
+That's it, the application will now be able to write to the /var/log/tomcat directory.
+
 #### Set Plaid clientId and clientSecret
 
 `export plaidClientId=<clientId>`
