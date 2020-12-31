@@ -38,6 +38,8 @@ public class PlaidController {
 //        return accessToken;
 //    }
 
+
+    // TODO - prevent adding duplicates - https://plaid.com/docs/link/duplicate-items/
     @RequestMapping(path = "/getLinkToken", method = RequestMethod.POST)
     public LinkTokenCreateResponse getLinkToken(@AuthenticationPrincipal Jwt jwt) throws IOException {
         // 1. Grab the client_user_id by searching for the current user in your database

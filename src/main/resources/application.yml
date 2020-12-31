@@ -6,4 +6,17 @@ com.megshan.splitnot.config:
   dynamoDB:
      tableNamePrefix: splitnot-
      accessKeyId:
-     secretAccessKey: 
+     secretAccessKey:
+
+logging:
+  file:
+    name: /var/log/tomcat/tomcat.log
+
+server:
+  tomcat:
+    accesslog:
+      enabled: true
+      suffix: .log
+      prefix: access
+#      file-date-format: .yyyy-MM-dd # file name format
+      directory: /var/log/tomcat
