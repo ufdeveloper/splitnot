@@ -50,7 +50,9 @@ That's it, the application will now be able to write to the /var/log/tomcat dire
 
 #### Run the jar on EC2 instance
 
-`java -jar splitnot-api-0.1.0.jar com.megshan.splitnot.SplitnotApplication` . Note that the SplitnotApplication name must include the full path name of the class.
+`nohup java -jar ~/splitnot-api-0.1.0.jar com.megshan.splitnot.SplitnotApplication &` . Note that the SplitnotApplication name must include the full path name of the class.
+
+The `&` at the end starts the process in the background. The `nohup` command keeps the process running even if the terminal is closed.
  
 #### Test the API endpoints
 
