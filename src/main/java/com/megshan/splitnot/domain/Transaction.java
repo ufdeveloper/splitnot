@@ -12,11 +12,13 @@ import lombok.ToString;
 @Data
 @ToString
 @AllArgsConstructor
-@DynamoDBTable(tableName = "account")
-public class Account {
+@DynamoDBTable(tableName = "transaction")
+public class Transaction {
     private String id;
     private String name;
-    private String plaidItemId;
-    private String plaidAccessToken;
+    private String amount;
+    private String date;
     private String userId;
+    private String accountId;
+    private String accountName;
 }

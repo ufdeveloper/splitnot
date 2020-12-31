@@ -41,4 +41,12 @@ public class TransactionController {
         log.info("getTransactions request received for accountId={} and userId={}", accountId, userId);
         return transactionService.getTransactions(accountId);
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(path = "/transactions/new", method = RequestMethod.GET)
+    public List<TransactionResponse> getNewTransactionsForUser(@AuthenticationPrincipal Jwt jwt) throws IOException{
+        String userId = jwt.getClaimAsString(ClaimTypes.uid.name());
+        log.info("getNewTransactionsForUser request received for userId={}", userId);
+        return transactionService.getNewTransactionsForUser(userId);
+    }
 }

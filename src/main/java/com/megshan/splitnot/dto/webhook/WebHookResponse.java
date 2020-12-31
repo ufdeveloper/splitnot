@@ -33,7 +33,7 @@ public class WebHookResponse {
 
     // Fields specific to webhook_type=TRANSACTIONS
     @JsonProperty("new_transactions")
-    String newTransactions;
+    String numNewTransactions;
 
     @JsonProperty("removed_transactions")
     List<String> removedTransactions;

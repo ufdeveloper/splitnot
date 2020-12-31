@@ -18,5 +18,7 @@ public interface AccountService {
 
     List<AccountResponse> getAccounts(String userId);
 
+    Account getAccountById(String accountId);
+
     AccountResponse addAccount(String userId, AddAccountRequest addAccountRequest);
 }

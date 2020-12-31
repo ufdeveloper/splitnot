@@ -1,9 +1,13 @@
 package com.megshan.splitnot.controller;
 
 import com.megshan.splitnot.dto.webhook.WebHookResponse;
+import com.megshan.splitnot.service.AuthorizationService;
+import com.megshan.splitnot.service.ResourceType;
 import com.megshan.splitnot.service.WebHookServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.util.Map;
 
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 /**
@@ -42,11 +47,26 @@ public class WebHookController {
     @Autowired
     private WebHookServiceImpl webHookServiceImpl;
 
+    @Autowired
+    private AuthorizationService authorizationService;
+
     @RequestMapping(value = WebHookServiceImpl.WEBHOOK_URL_PART, method = RequestMethod.POST)
     @ResponseStatus(OK)
-    public void postToWebHook(@RequestBody WebHookResponse webHookResponse) {
+    public void listenToWebhook(@RequestBody WebHookResponse webHookResponse) throws IOException{
         log.info("Webhook callback received from Plaid");
         webHookServiceImpl.handleWebHookCall(webHookResponse);
     }
 
+    /**
+     * This API is used for testing only.
+     * This calls the POST https://sandbox.plaid.com/sandbox/item/fire_webhook API to fire a webhook
+     * This is not done via the UI because the request contains the accessToken for the item, which we do not want to expose via the UI.
+     */
+    @RequestMapping(value = "/fireWebhook", method = RequestMethod.POST)
+    @ResponseStatus(CREATED)
+    public void fireWebhook(@AuthenticationPrincipal Jwt jwt, @RequestParam String accountId) throws IOException {
+        String userId = jwt.getClaimAsString(ClaimTypes.uid.name());
+        authorizationService.authorize(userId, accountId, ResourceType.ACCOUNT);
+        webHookServiceImpl.fireWebhook(accountId);
+    }
 }

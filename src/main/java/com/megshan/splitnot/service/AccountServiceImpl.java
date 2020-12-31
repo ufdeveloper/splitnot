@@ -3,6 +3,7 @@ package com.megshan.splitnot.service;
 import com.megshan.splitnot.domain.Account;
 import com.megshan.splitnot.dto.AccountResponse;
 import com.megshan.splitnot.dto.AddAccountRequest;
+import com.megshan.splitnot.exceptions.NotFoundException;
 import com.plaid.client.PlaidClient;
 import com.plaid.client.request.AccountsGetRequest;
 import com.plaid.client.response.AccountsGetResponse;
@@ -57,6 +58,14 @@ public class AccountServiceImpl implements AccountService {
                 .filter(account -> account.getUserId().equals(userId))
                 .map(account -> new AccountResponse(account.getId(), account.getName()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Account getAccountById(String accountId) {
+        return ACCOUNTS_STORE
+                .stream()
+                .filter(account -> account.getId().equals(accountId))
+                .findFirst().orElseThrow(() -> new NotFoundException("account not found with id=" + accountId));
     }
 
     @Override

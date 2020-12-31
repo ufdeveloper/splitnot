@@ -10,4 +10,6 @@ public class TransactionResponse {
     private String name;
     private String amount;
     private String date;
+    private String accountId;
+    private String accountName;
 }
