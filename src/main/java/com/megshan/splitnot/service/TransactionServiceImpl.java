@@ -1,5 +1,6 @@
 package com.megshan.splitnot.service;
 
+import com.megshan.splitnot.data.TransactionRepository;
 import com.megshan.splitnot.domain.Account;
 import com.megshan.splitnot.dto.TransactionResponse;
 import com.megshan.splitnot.exceptions.NotFoundException;
@@ -27,70 +28,35 @@ import java.util.stream.Collectors;
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
-//    @PostConstruct
-//    public void addDummyNewTransactions() {
-//        TRANSACTIONS_STORE.add(new com.megshan.splitnot.domain.Transaction("transaction1", "Papa Johns", "500", "2020-12-24", "00ujbv54zGAnyS3uO4x6"));
-//        TRANSACTIONS_STORE.add(new com.megshan.splitnot.domain.Transaction("transaction2", "Alaska Air", "1500", "2020-12-24", "00ujbv54zGAnyS3uO4x6"));
-//    }
-
     @Autowired
     private PlaidClient plaidClient;
 
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
+
     @Override
-    public List<TransactionResponse> getTransactions(String accountId) throws IOException {
+    public List<TransactionResponse> getTransactions(String userId, String accountId, Integer count) throws IOException {
 
         // get accessToken corresponding to accountId
-        Account accountFetched = AccountService.ACCOUNTS_STORE.stream()
-                            .filter(account -> account.getId().equals(accountId))   // ids in Plaid are case sensitive
-                            .findAny()
-                            .orElseThrow(() -> new NotFoundException("account not found with accountId=" + accountId));
-
-        log.info("Found account={} for accountId={}", accountFetched, accountId);
-
-        Response<TransactionsGetResponse> response = plaidClient.service().transactionsGet(
-                new TransactionsGetRequest(
-                        accountFetched.getPlaidAccessToken(),
-                        Date.from(LocalDate.now().minusDays(30).atStartOfDay(ZoneId.systemDefault()).toInstant()),
-                        Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant())))
-                .execute();
-
-        if(!response.isSuccessful()) {
-            log.error("Error retrieving transactions"
-                    + ", errorMessage=" + response.errorBody().string());
-            return null;
+        Account accountFetched = accountService.getAccountByUserIdAndAccountId(userId, accountId);
+        if (accountFetched == null) {
+            throw new NotFoundException("account not found with accountId=" + accountId);
         }
 
-        List<Transaction> transactions = response.body().getTransactions();
-        log.info("Retrieved " + transactions.size() + " transactions");
+        log.info("Found account={} for userId={}, accountId={}", accountFetched, userId, accountId);
 
-        return transactions.stream()
-                .map(transaction -> new TransactionResponse(
-                        transaction.getTransactionId(),
-                        transaction.getName(),
-                        String.valueOf(transaction.getAmount()),
-                        transaction.getDate(),
-                        accountFetched.getId(),
-                        accountFetched.getName()))
-                .collect(Collectors.toList());
-    }
+        TransactionsGetRequest transactionsGetRequest = new TransactionsGetRequest(
+                accountFetched.getPlaidAccessToken(),
+                Date.from(LocalDate.now().minusDays(30).atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        if (count != null) {
+            transactionsGetRequest.withCount(count);
+        }
 
-    @Override
-    public List<TransactionResponse> getTransactionsByItem(String itemId, int count) throws IOException {
-
-        // get accessToken corresponding to item
-        Account accountFetched = AccountService.ACCOUNTS_STORE.stream()
-                .filter(account -> account.getPlaidItemId().equals(itemId))   // ids in Plaid are case sensitive
-                .findAny()
-                .orElseThrow(() -> new NotFoundException("account not found with itemId=" + itemId));
-
-        log.info("Found account={} for itemId={}", accountFetched, itemId);
-
-        Response<TransactionsGetResponse> response = plaidClient.service().transactionsGet(
-                new TransactionsGetRequest(
-                        accountFetched.getPlaidAccessToken(),
-                        Date.from(LocalDate.now().minusDays(10).atStartOfDay(ZoneId.systemDefault()).toInstant()),
-                        Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()))
-                        .withCount(count))
+        Response<TransactionsGetResponse> response = plaidClient.service().transactionsGet(transactionsGetRequest)
                 .execute();
 
         if(!response.isSuccessful()) {
@@ -116,24 +82,28 @@ public class TransactionServiceImpl implements TransactionService {
     // TODO - return only new transactions size
     @Override
     public int pollNewTransactionsForUser(String userId) {
-        return TRANSACTIONS_STORE.size();
+        return transactionRepository.countByUserId(userId);
 //        return 5; // For sandbox testing only
     }
 
     // TODO - return only new transactions
     @Override
     public List<TransactionResponse> getNewTransactionsForUser(String userId) {
-        List<TransactionResponse> transactionResponse = TRANSACTIONS_STORE.stream()
+
+        List<com.megshan.splitnot.domain.Transaction> userTransactions = transactionRepository.findByUserId(userId);
+
+        List<TransactionResponse> transactionResponse = userTransactions.stream()
                 .map(transaction -> new TransactionResponse(transaction.getId(), transaction.getName(), transaction.getAmount(), transaction.getDate(), transaction.getAccountId(), transaction.getAccountName()))
                 .collect(Collectors.toList());
 
-        // clear the transactions store for demo
-        TRANSACTIONS_STORE.clear();
+        // remove the user's transactions for demo
+        transactionRepository.deleteAll(userTransactions);
+
         return transactionResponse;
     }
 
     @Override
     public void addRecentTransactions(List<com.megshan.splitnot.domain.Transaction> newTransactions) {
-        TRANSACTIONS_STORE.addAll(newTransactions);
+        transactionRepository.saveAll(newTransactions);
     }
 }

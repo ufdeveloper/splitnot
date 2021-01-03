@@ -1,22 +1,21 @@
 package com.megshan.splitnot.service;
 
+import com.megshan.splitnot.data.AccountRepository;
 import com.megshan.splitnot.domain.Account;
+import com.megshan.splitnot.domain.AccountIdKey;
 import com.megshan.splitnot.dto.AccountResponse;
 import com.megshan.splitnot.dto.AddAccountRequest;
 import com.megshan.splitnot.exceptions.NotFoundException;
-import com.plaid.client.PlaidClient;
-import com.plaid.client.request.AccountsGetRequest;
-import com.plaid.client.response.AccountsGetResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import retrofit2.Response;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Created by shantanu on 4/12/17.
@@ -26,7 +25,7 @@ import java.util.stream.Collectors;
 public class AccountServiceImpl implements AccountService {
 
     @Autowired
-    private PlaidClient plaidClient;
+    private AccountRepository accountRepository;
 
     @Autowired
     private TokenService tokenService;
@@ -52,20 +51,35 @@ public class AccountServiceImpl implements AccountService {
 //    }
 
     @Override
-    public List<AccountResponse> getAccounts(String userId) {
-        return ACCOUNTS_STORE
-                .stream()
+    public List<AccountResponse> getAccountsByUserId(String userId) {
+
+//        List<AccountIdKey> accountIdKeys = Collections.singletonList(new AccountIdKey(userId));
+        return accountRepository.findByUserId(userId).stream()
                 .filter(account -> account.getUserId().equals(userId))
                 .map(account -> new AccountResponse(account.getId(), account.getName()))
                 .collect(Collectors.toList());
+
+//        return ACCOUNTS_STORE
+//                .stream()
+//                .filter(account -> account.getUserId().equals(userId))
+//                .map(account -> new AccountResponse(account.getId(), account.getName()))
+//                .collect(Collectors.toList());
     }
 
     @Override
-    public Account getAccountById(String accountId) {
-        return ACCOUNTS_STORE
-                .stream()
-                .filter(account -> account.getId().equals(accountId))
-                .findFirst().orElseThrow(() -> new NotFoundException("account not found with id=" + accountId));
+    public Account getAccountByUserIdAndAccountId(String userId, String accountId) {
+//        return ACCOUNTS_STORE
+//                .stream()
+//                .filter(account -> account.getId().equals(accountId))
+//                .findFirst().orElseThrow(() -> new NotFoundException("account not found with id=" + accountId));
+
+        return accountRepository.findById(new AccountIdKey(userId, accountId)).orElseThrow(
+                () -> new NotFoundException("account not found with userId=" + userId + " and accountId=" + accountId));
+    }
+
+    @Override
+    public Optional<Account> getAccountByItemId(String itemId) {
+        return accountRepository.findByItemId(itemId);
     }
 
     @Override
@@ -80,7 +94,9 @@ public class AccountServiceImpl implements AccountService {
                 exchangePublicTokenResponseMap.get("itemId"),
                 exchangePublicTokenResponseMap.get("accessToken"),
                 userId);
-        ACCOUNTS_STORE.add(account);
+
+//        ACCOUNTS_STORE.add(account);
+        accountRepository.save(account);
 
         return new AccountResponse(addAccountRequest.getAccountId(), addAccountRequest.getAccountName());
     }

@@ -3,10 +3,8 @@ okta:
     issuer: https://dev-565937.okta.com/oauth2/default
 
 com.megshan.splitnot.config:
-  dynamoDB:
+  dynamodb:
      tableNamePrefix: splitnot-
-     accessKeyId:
-     secretAccessKey:
 
 logging:
   file:

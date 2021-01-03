@@ -16,7 +16,7 @@ import static com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperField
 
 @Data
 @ToString(exclude = "accessToken")
-@DynamoDBTable(tableName = "items")
+//@DynamoDBTable(tableName = "items")
 public class Item {
 
     @DynamoDBHashKey

@@ -41,7 +41,7 @@ public class AccountController {
     @RequestMapping(value = "/accounts", method = RequestMethod.GET)
     public List<AccountResponse> getAccounts(@AuthenticationPrincipal Jwt jwt) {
         log.info("fetch accounts request received for userId={}", jwt.getClaimAsString(ClaimTypes.uid.name()));
-        return accountService.getAccounts(jwt.getClaimAsString(ClaimTypes.uid.name()));
+        return accountService.getAccountsByUserId(jwt.getClaimAsString(ClaimTypes.uid.name()));
     }
 
     // TODO - Replace in-memory with DB

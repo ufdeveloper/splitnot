@@ -67,6 +67,6 @@ public class WebHookController {
     public void fireWebhook(@AuthenticationPrincipal Jwt jwt, @RequestParam String accountId) throws IOException {
         String userId = jwt.getClaimAsString(ClaimTypes.uid.name());
         authorizationService.authorize(userId, accountId, ResourceType.ACCOUNT);
-        webHookServiceImpl.fireWebhook(accountId);
+        webHookServiceImpl.fireWebhook(userId, accountId);
     }
 }

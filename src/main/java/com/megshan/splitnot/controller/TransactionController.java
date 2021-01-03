@@ -39,7 +39,7 @@ public class TransactionController {
         authorizationService.authorize(userId, accountId, ResourceType.ACCOUNT);
 
         log.info("getTransactions request received for accountId={} and userId={}", accountId, userId);
-        return transactionService.getTransactions(accountId);
+        return transactionService.getTransactions(userId, accountId, null);
     }
 
     @ResponseStatus(HttpStatus.OK)

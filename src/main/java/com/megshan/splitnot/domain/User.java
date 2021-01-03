@@ -17,7 +17,7 @@ import static com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperField
  */
 
 @Data
-@DynamoDBTable(tableName = "users")
+//@DynamoDBTable(tableName = "users")
 public class User {
 
     @DynamoDBHashKey

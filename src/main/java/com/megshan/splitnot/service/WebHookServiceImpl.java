@@ -7,11 +7,9 @@ import com.megshan.splitnot.dto.webhook.WebHookResponse;
 import com.megshan.splitnot.exceptions.NotFoundException;
 import com.plaid.client.PlaidClient;
 import com.plaid.client.request.SandboxItemFireWebhookRequest;
-import com.plaid.client.response.SandboxItemFireWebhookResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import retrofit2.Call;
 
 import java.io.IOException;
 import java.util.List;
@@ -88,30 +86,27 @@ public class WebHookServiceImpl {
         String itemId = webHookResponse.getItemId();
 
         // fetch userId associated with itemId
-        String userId = AccountService.ACCOUNTS_STORE.stream()
-                    .filter(account -> account.getPlaidItemId().equals(itemId))
-                    .findFirst().orElseThrow(() -> new NotFoundException("account not found with itemId=" + itemId))
-                .getUserId();
+        Account account = accountService.getAccountByItemId(itemId).orElseThrow(() -> new NotFoundException("account not found with itemId=" + itemId));
 
         // fetch new transactions for item from Plaid
-        List<TransactionResponse> newTransactions = transactionService.getTransactionsByItem(itemId, numNewTransactions);
+        List<TransactionResponse> newTransactions = transactionService.getTransactions(account.getUserId(), account.getId(), numNewTransactions);
 
         // add new transactions to transactions store
         transactionService.addRecentTransactions(newTransactions.stream()
                 .map(newTransaction -> new Transaction(newTransaction.getId(), newTransaction.getName(), newTransaction.getAmount(),
-                        newTransaction.getDate(), userId, newTransaction.getAccountId(), newTransaction.getAccountName()))
+                        newTransaction.getDate(), account.getUserId(), newTransaction.getAccountId(), newTransaction.getAccountName()))
                 .collect(Collectors.toList()));
     }
 
-    public void fireWebhook(String accountId) throws IOException {
+    public void fireWebhook(String userId, String accountId) throws IOException {
 
         // fetch account from accountId
-        Account account = accountService.getAccountById(accountId);
+        Account account = accountService.getAccountByUserIdAndAccountId(userId, accountId);
 
         // fire sandbox webhook
         SandboxItemFireWebhookRequest sandboxItemFireWebhookRequest = new SandboxItemFireWebhookRequest(account.getPlaidAccessToken(), WEBHOOK_CODE_DEFAULT_UPDATE);
         plaidClient.service().sandboxItemFireWebhook(sandboxItemFireWebhookRequest).execute();
 
-        log.info("successfully fired sandbox webhook for accountId={}", accountId);
+        log.info("successfully fired sandbox webhook for userId={}, accountId={}", userId, accountId);
     }
 }

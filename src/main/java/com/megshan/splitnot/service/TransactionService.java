@@ -4,7 +4,6 @@ import com.megshan.splitnot.domain.Transaction;
 import com.megshan.splitnot.dto.TransactionResponse;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,12 +11,7 @@ import java.util.List;
  */
 public interface TransactionService {
 
-    // TODO - this will be replaced by transactionsDao
-    List<Transaction> TRANSACTIONS_STORE = new ArrayList<>();
-
-    List<TransactionResponse> getTransactions(String accountId) throws IOException;
-
-    List<TransactionResponse> getTransactionsByItem(String itemId, int count) throws IOException;
+    List<TransactionResponse> getTransactions(String userId, String accountId, Integer count) throws IOException;
 
     int pollNewTransactionsForUser(String userId);
 
