@@ -6,7 +6,7 @@ For the prototype, the splitnot-api JAR is manually deployed to EC2.
 
 - Create a free-tier eligible Linux instance.
 - Save the pem key obtained while creating the instance.
-- Create the following inbound rules on the security group assigned to the instance,
+- Create the following inbound rules on the security group assigned to the instance, (Note - this is an incomplete list, needs to be updated)
 ```
    Type         Protocol        Port range      Source
    Custom TCP	TCP	        8080	        100.35.182.33/32 <== your IP. This rule is to allow web traffic
