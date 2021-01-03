@@ -45,8 +45,15 @@ That's it, the application will now be able to write to the /var/log/tomcat dire
 
 #### Set Plaid clientId and clientSecret
 
-`export plaidClientId=<clientId>`
-`export plaidClientSecret=<clientSecret>`
+`export plaidClientId=<clientId>`  
+`export plaidClientSecret=<clientSecret>`  
+
+#### Set AWS awsAccesskey and awsSecretkey
+
+This is needed by the service to connect to dynamoDB.  
+
+`export awsAccesskey=<accesskey>`  
+`export awsSecretkey=<awsSecretkey>`  
 
 #### Run the jar on EC2 instance
 
